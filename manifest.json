@@ -1,13 +1,9 @@
 {
-  "name": "College Schedule ME-B Semester-8 2026",
-  "short_name": "TimeTable",
-  "start_url": "https://alyod.tech/clg-timetable",
-  "display": "standalone",
-  "background_color": "#111827",
-  "theme_color": "#111827",
-  "icons": [
-  {
-    "src": "calendar.png"
-  }]
-
+  "theme_color":"#8936FF",
+  "background_color":"#2EC6FE",
+  "icons":[{"purpose":"maskable","sizes":"512x512","src":"icon512_maskable.png","type":"image/png"},{"purpose":"any","sizes":"512x512","src":"icon512_rounded.png","type":"image/png"}],
+  "orientation":"any","display":"standalone","dir":"auto","lang":"en",
+  "name":"ME-B Time Table ",
+  "short_name":"TimeTable",
+  "start_url":"https://alyod.tech/clg-timetable","scope":"https://alyod.tech/clg-timetable/","id":"https://alyod.tech/clg-timetable"
 }
