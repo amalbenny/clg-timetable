@@ -1,9 +1,13 @@
 {
-  "name": "Daily Timetable",
-  "short_name": "Timetable",
-  "start_url": ".",
+  "name": "College Schedule ME-B Semester-8 2026",
+  "short_name": "TimeTable",
+  "start_url": "https://alyod.tech/clg-timetable",
   "display": "standalone",
   "background_color": "#111827",
   "theme_color": "#111827",
-  "icons": []
+  "icons": [
+  {
+    "src": "calendar.png"
+  }]
+
 }
