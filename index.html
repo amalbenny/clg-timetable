@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Timetable – PWA</title>
+
+  <!-- PWA MANIFEST -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111827">
+
+  <style>
+    :root {
+      --theory: #60a5fa;
+      --lab: #facc15;
+      --project: #f87171;
+      --free: #fb923c;
+      --tutorial: #a78bfa;
+      --bg: #f9fafb;
+      --card: #ffffff;
+      --text: #111827;
+      --active: #22c55e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: #111827;
+      color: white;
+    }
+
+    header button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    header h1 {
+      font-size: 18px;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    main { padding: 16px; }
+
+    .period {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 6px solid transparent;
+    }
+
+    .period.active {
+      border-left-color: var(--active);
+      box-shadow: 0 0 0 2px rgba(34,197,94,0.3);
+    }
+
+    .info { display: flex; flex-direction: column; }
+    .time { font-size: 12px; opacity: 0.7; }
+    .subject { font-weight: 600; margin-top: 4px; }
+
+    .type {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .theory { background: var(--theory); }
+    .lab { background: var(--lab); color: black; }
+    .project { background: var(--project); }
+    .free { background: var(--free); }
+    .tutorial { background: var(--tutorial); }
+
+    @media (min-width: 768px) {
+      body { max-width: 420px; margin: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <button onclick="prevDay()">◀</button>
+  <h1 id="dayTitle"></h1>
+  <button onclick="nextDay()">▶</button>
+</header>
+
+<main id="timetable"></main>
+
+<script>
+  /* ================= TIMETABLE DATA ================= */
+  const timetable = {
+    Monday: [
+      { start: "09:00", end: "09:50", subject: "MET404 – Comprehensive Viva", type: "theory" },
+      { start: "09:50", end: "10:40", subject: "MET402 – Mechatronics", type: "theory" },
+      { start: "10:55", end: "11:45", subject: "Micro & Nano Manufacturing", type: "lab" },
+      { start: "11:45", end: "12:35", subject: "Project Planning & Management", type: "lab" },
+      { start: "13:25", end: "14:15", subject: "Project Phase II", type: "project" },
+      { start: "14:15", end: "15:00", subject: "Project Planning & Management", type: "lab" },
+      { start: "15:15", end: "16:00", subject: "Composite Materials", type: "lab" }
+    ],
+    Tuesday: [
+      { start: "09:00", end: "09:50", subject: "Project Planning & Management", type: "lab" },
+      { start: "09:50", end: "10:40", subject: "Micro & Nano Manufacturing", type: "lab" },
+      { start: "10:55", end: "11:45", subject: "MET402 – Mechatronics", type: "theory" },
+      { start: "11:45", end: "12:35", subject: "Composite Materials", type: "lab" },
+      { start: "13:25", end: "14:15", subject: "Micro & Nano Manufacturing", type: "lab" },
+      { start: "14:15", end: "15:00", subject: "Composite Materials", type: "lab" },
+      { start: "15:15", end: "16:00", subject: "MET402 – Mechatronics", type: "theory" }
+    ],
+    Wednesday: [
+      { start: "09:00", end: "09:50", subject: "MET404 – Comprehensive Viva", type: "theory" },
+      { start: "09:50", end: "10:40", subject: "Micro & Nano Manufacturing", type: "lab" },
+      { start: "10:55", end: "11:45", subject: "Project Planning & Management", type: "lab" },
+      { start: "11:45", end: "12:35", subject: "Project Planning & Management", type: "lab" },
+      { start: "13:25", end: "14:15", subject: "Project Phase II", type: "project" },
+      { start: "14:15", end: "15:00", subject: "Project Phase II", type: "project" },
+      { start: "15:15", end: "16:00", subject: "Project Phase II", type: "project" }
+    ],
+    Thursday: [
+      { start: "09:00", end: "09:50", subject: "MET402 – Tutorial", type: "tutorial" },
+      { start: "09:50", end: "10:40", subject: "MET402 – Mechatronics", type: "theory" },
+      { start: "10:55", end: "11:45", subject: "Composite Materials", type: "lab" },
+      { start: "11:45", end: "12:35", subject: "Composite Materials", type: "lab" },
+      { start: "13:25", end: "14:15", subject: "Project Phase II", type: "project" },
+      { start: "14:15", end: "15:00", subject: "Project Phase II", type: "project" },
+      { start: "15:15", end: "16:00", subject: "Micro & Nano Manufacturing", type: "lab" }
+    ],
+    Friday: [
+      { start: "09:00", end: "16:00", subject: "Project Phase II (Full Day)", type: "project" }
+    ],
+    Saturday: [ { start: "00:00", end: "23:59", subject: "Free Day", type: "free" } ]
+  };
+
+  const days = Object.keys(timetable);
+  let currentDayIndex = new Date().getDay() - 1;
+  if (currentDayIndex < 0 || currentDayIndex > 5) currentDayIndex = 0;
+
+  function timeToMinutes(t) {
+    const [h, m] = t.split(":").map(Number);
+    return h * 60 + m;
+  }
+
+  function renderDay() {
+    const day = days[currentDayIndex];
+    document.getElementById("dayTitle").innerText = day;
+
+    const now = new Date();
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+
+    const container = document.getElementById("timetable");
+    container.innerHTML = "";
+
+    timetable[day].forEach(p => {
+      const active = now.getDay() - 1 === currentDayIndex &&
+        nowMin >= timeToMinutes(p.start) && nowMin <= timeToMinutes(p.end);
+
+      const div = document.createElement("div");
+      div.className = `period ${active ? "active" : ""}`;
+
+      div.innerHTML = `
+        <div class="info">
+          <div class="time">${p.start} – ${p.end}</div>
+          <div class="subject">${p.subject}</div>
+        </div>
+        <div class="type ${p.type}">${p.type.toUpperCase()}</div>
+      `;
+
+      container.appendChild(div);
+    });
+  }
+
+  function prevDay() { currentDayIndex = (currentDayIndex - 1 + days.length) % days.length; renderDay(); }
+  function nextDay() { currentDayIndex = (currentDayIndex + 1) % days.length; renderDay(); }
+
+  /* ================= GESTURE NAVIGATION ================= */
+  let startX = 0;
+  document.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+  document.addEventListener("touchend", e => {
+    const diff = e.changedTouches[0].clientX - startX;
+    if (diff > 80) prevDay();
+    if (diff < -80) nextDay();
+  });
+
+  /* ================= LIVE TRACKING ================= */
+  setInterval(renderDay, 60000);
+
+  /* ================= SERVICE WORKER ================= */
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+  }
+
+  renderDay();
+</script>
+
+
+</body>
+</html>
