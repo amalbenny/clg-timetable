@@ -7,10 +7,11 @@ A lightweight Progressive Web App (PWA) for displaying your daily timetable with
 - 📱 **Progressive Web App** - Works offline and can be installed as a standalone app
 - 🎨 **Color-coded subjects** - Different colors for different class types:
   - **Theory** (Blue) - Theoretical lectures
-  - **Lab** (Yellow) - Laboratory sessions
+  - **Elective** (Yellow) - Elective sessions
   - **Project** (Red) - Project work
   - **Free** (Orange) - Free periods
   - **Tutorial** (Purple) - Tutorial sessions
+  - **Others** (Green) - Special Class and Lab Periods
 - ⏱️ **Time tracking** - Shows current time and highlights the active class
 - 📱 **Responsive design** - Optimized for mobile and tablet devices
 - 🚀 **Fast loading** - Service worker enables offline functionality
