@@ -1,5 +1,8 @@
 # Daily Timetable PWA
 
+---
+📌 *Notice* : This repository is longer maintained for shifting focus to [amalbenny/class-timetable](https://github.com/amalbenny/class-timetable/).
+---
 A lightweight Progressive Web App (PWA) for displaying your daily timetable with subject types and timing information.
 
 ## Features
