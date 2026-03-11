@@ -94,6 +94,51 @@
     .tutorial { background: var(--tutorial); }
     .others { background: var(--others);}
 
+    /* UPDATE NOTICE */
+  .update-banner {
+    position: fixed;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: #e5e7eb;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 999;
+  }
+
+  .update-banner a {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .update-banner button {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .update-banner button:hover {
+    color: white;
+  }
+  .update-banner {
+    opacity: 0;
+    animation: fadeIn 0.6s forwards;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
     @media (min-width: 768px) {
       body { max-width: 420px; margin: auto; }
     }
@@ -109,6 +154,13 @@
 
 <main id="timetable"></main>
 
+<div id="updateBanner" class="update-banner" style="display:none;">
+  Check the latest version of 
+  <a href="https://alyod.tech/class-timetable/" target="_blank">
+    Class TimeTable v2
+  </a>
+  <button onclick="closeUpdate()">×</button>
+</div>
 <script>
   /* ================= TIMETABLE DATA ================= */
   const timetable = {
@@ -217,10 +269,23 @@
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js");
   }
+  /* ================= UPDATE NOTICE ================= */
+
+  function closeUpdate() {
+    document.getElementById("updateBanner").style.display = "none";
+    localStorage.setItem("ctt_update_closed", "true");
+  }
+
+  function showUpdate() {
+    if (!localStorage.getItem("ctt_update_closed")) {
+      document.getElementById("updateBanner").style.display = "flex";
+    }
+  }
+
+  showUpdate();
 
   renderDay();
 </script>
-
 
 </body>
 </html>
